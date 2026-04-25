@@ -323,13 +323,13 @@ function RecommendationCard({ rec, stepTitle }: { rec: any; stepTitle: string })
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="px-6 md:px-8 pb-8 pt-2">
-              <h4 className="text-sm font-semibold text-ink border-b border-line pb-4 mb-6 flex items-center gap-2">Core Recommendations</h4>
-              <ul className="space-y-6">
+            <div className="px-6 md:px-10 pb-10 pt-4">
+              <h4 className="text-[13px] font-bold uppercase tracking-widest text-ink-muted border-b border-line pb-4 mb-8">Core Recommendations</h4>
+              <ul className="space-y-8">
                 {rec.points.map((p: string, idx: number) => (
-                  <li key={idx} className="flex gap-5 text-ink font-light leading-[1.7] text-base md:text-[17px]">
-                    <span className="font-mono text-[11px] font-bold text-accent mt-1 shrink-0 bg-paper px-2 py-1 border border-line">{(idx + 1).toString().padStart(2, '0')}</span>
-                    <span>{p}</span>
+                  <li key={idx} className="flex gap-6 group">
+                    <div className="font-mono text-[11px] font-bold text-ink-muted mt-1.5 shrink-0 bg-paper border border-line w-8 h-8 flex items-center justify-center rounded-full group-hover:border-accent group-hover:text-accent transition-colors">{(idx + 1).toString().padStart(2, '0')}</div>
+                    <span className="text-ink text-[17px] md:text-[19px] leading-[1.7] font-light">{p}</span>
                   </li>
                 ))}
               </ul>
