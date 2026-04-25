@@ -182,14 +182,14 @@ export default function LandingPage({ onStart, onIntro }: LandingPageProps) {
               This toolkit is a strategic partnership between <strong className="text-ink font-semibold">CCFLA</strong> and <strong className="text-ink font-semibold">Viable Cities</strong>. A key goal of this toolkit is to showcase impactful multilevel governance initiatives championed in <strong className="text-ink font-semibold">Sweden</strong>.
             </p>
           </div>
-          <div className="md:w-7/12 w-full flex flex-col items-center justify-between gap-12 py-4">
+          <div className="md:w-7/12 w-full flex flex-col items-center justify-between gap-6 py-4">
             {/* Top row: CCFLA and Viable Cities logos placed horizontally */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-12 w-full">
               <div className="flex-1 flex justify-end items-center">
                 <img 
                   src="https://www.climatepolicyinitiative.org/wp-content/uploads/2020/09/CCFLA-hero.png" 
                   alt="CCFLA" 
-                  className="h-44 md:h-56 object-contain grayscale hover:grayscale-0 transition-all mix-blend-multiply md:translate-x-6" 
+                  className="h-44 md:h-56 object-contain hover:-translate-y-1 transition-all mix-blend-multiply md:translate-x-6" 
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -198,14 +198,14 @@ export default function LandingPage({ onStart, onIntro }: LandingPageProps) {
                 <img 
                   src="https://images.squarespace-cdn.com/content/v1/59e86b55aeb625e2140eec1a/1634044375194-3G0ZG1T5HGMGNB2QSEYU/1.+VC_Logotyp_PRIM%C3%84R_RGB.png" 
                   alt="Viable Cities" 
-                  className="h-20 md:h-28 object-contain grayscale hover:grayscale-0 transition-all mix-blend-multiply opacity-90" 
+                  className="h-20 md:h-28 object-contain hover:-translate-y-1 transition-all mix-blend-multiply opacity-90" 
                   referrerPolicy="no-referrer"
                 />
               </div>
             </div>
             
             {/* Bottom row: Sweden flag */}
-            <div className="flex flex-col items-center justify-center pt-8 border-t border-line w-4/5 md:w-3/4">
+            <div className="flex flex-col items-center justify-center pt-6 border-t border-line w-4/5 md:w-3/4">
               <span className="text-ink-muted text-sm uppercase tracking-widest font-semibold mb-6">Supported by</span>
               <img 
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Flag_of_Sweden.svg/3840px-Flag_of_Sweden.svg.png" 
