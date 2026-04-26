@@ -1,1 +1,0 @@
-console.log(process.env.GEMINI_API_KEY ? typeof process.env.GEMINI_API_KEY : );

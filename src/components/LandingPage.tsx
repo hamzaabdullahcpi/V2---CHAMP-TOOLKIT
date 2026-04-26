@@ -2,54 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "motion/react";
 import { landingPageData, stepsData } from "../data/content";
 import { ArrowRight, Globe, FileText, TrendingUp, ExternalLink, HelpCircle, Target, Rocket, CheckCircle2, MapPin } from "lucide-react";
-
-function AnimatedCounter({ value }: { value: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const [displayValue, setDisplayValue] = useState("0");
-  
-  useEffect(() => {
-    if (!isInView) return;
-    
-    const match = value.match(/^([^0-9]*)([0-9.]+)([^0-9]*)$/);
-    if (!match) {
-      setDisplayValue(value);
-      return;
-    }
-    
-    const prefix = match[1];
-    const numStr = match[2];
-    const suffix = match[3];
-    const target = parseFloat(numStr);
-    const isFloat = numStr.includes('.');
-    
-    let startTimestamp: number;
-    const duration = 2000;
-    
-    const step = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      const current = easeProgress * target;
-      
-      if (isFloat) {
-        setDisplayValue(`${prefix}${current.toFixed(1)}${suffix}`);
-      } else {
-        setDisplayValue(`${prefix}${Math.floor(current)}${suffix}`);
-      }
-      
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      } else {
-        setDisplayValue(value);
-      }
-    };
-    
-    window.requestAnimationFrame(step);
-  }, [isInView, value]);
-
-  return <span ref={ref}>{displayValue}</span>;
-}
+import MapDashboard from "./MapDashboard";
 
 interface LandingPageProps {
   onStart: () => void;
@@ -101,7 +54,7 @@ export default function LandingPage({ onStart, onIntro }: LandingPageProps) {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="pt-24 md:pt-32 pb-12 md:pb-16 flex flex-col items-center text-center border-b border-line mb-12"
+        className="pt-24 md:pt-32 pb-12 md:pb-16 flex flex-col items-center text-center border-b border-line mb-4"
       >
         <div className="inline-flex items-center gap-3 px-4 py-2 border border-line bg-surface mb-12 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)]">
           <div className="w-1.5 h-1.5 bg-accent"></div>
@@ -219,47 +172,7 @@ export default function LandingPage({ onStart, onIntro }: LandingPageProps) {
       </motion.div>
 
       {/* Interactive Data Dashboard */}
-      <div className="mb-24">
-        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between border-b border-line pb-6 gap-6">
-          <h2 className="font-heading text-3xl font-semibold text-ink tracking-tight max-w-lg">Key Highlights</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-line border border-line">
-          {landingPageData.dashboard.map((item, index) => {
-            const Icon = icons[index];
-            
-            return (
-              <motion.a
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="flex flex-col justify-between bg-surface p-10 hover:bg-paper transition-colors group relative cursor-pointer"
-              >
-                <div>
-                  <div className="mb-8 p-3 bg-paper w-fit text-accent group-hover:scale-105 transition-transform origin-left">
-                    <Icon size={24} className="stroke-[2]" />
-                  </div>
-                  <div className="relative z-10">
-                    <h3 className="text-[13px] font-semibold text-ink-muted uppercase tracking-wider mb-3 group-hover:text-accent transition-colors">{item.title}</h3>
-                    <div className="font-heading text-5xl md:text-6xl text-ink font-medium mb-4 tracking-tight">
-                      <AnimatedCounter value={item.value} />
-                    </div>
-                    <p className="text-ink-muted text-sm leading-relaxed font-light">{item.description}</p>
-                  </div>
-                </div>
-                <div className="relative z-10 mt-8 flex justify-end">
-                  <div className="w-8 h-8 flex items-center justify-center border border-line bg-paper group-hover:bg-accent group-hover:border-accent transition-colors">
-                    <ExternalLink size={14} className="text-ink-muted group-hover:text-surface transition-colors" />
-                  </div>
-                </div>
-              </motion.a>
-            );
-          })}
-        </div>
-      </div>
+      <MapDashboard stats={landingPageData.dashboard} />
 
       {/* Toolkit Context Section */}
       <motion.div 
