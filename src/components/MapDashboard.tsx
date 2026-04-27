@@ -477,9 +477,13 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
                 className="absolute z-50 pointer-events-none bg-surface border border-line shadow-2xl p-4 max-w-[250px]"
-                style={{ 
-                  left: containerSize.width && (tooltipPos.x + 280 > containerSize.width) ? tooltipPos.x - 265 : tooltipPos.x + 15, 
-                  top: containerSize.height && (tooltipPos.y + 120 > containerSize.height) ? tooltipPos.y - 110 : tooltipPos.y + 15
+                style={{
+                  ...(containerSize.width && (tooltipPos.x + 280 > containerSize.width)
+                    ? { right: containerSize.width - tooltipPos.x + 15 }
+                    : { left: tooltipPos.x + 15 }),
+                  ...(containerSize.height && (tooltipPos.y + 120 > containerSize.height)
+                    ? { bottom: containerSize.height - tooltipPos.y + 15 }
+                    : { top: tooltipPos.y + 15 })
                 }}
               >
                 <div className="text-[12px] uppercase tracking-widest font-bold text-ink mb-2 border-b border-line pb-2">
@@ -506,9 +510,13 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
                 className="absolute z-50 pointer-events-none bg-surface border border-line shadow-2xl p-4 max-w-[200px]"
-                style={{ 
-                  left: containerSize.width && (tooltipPos.x + 230 > containerSize.width) ? tooltipPos.x - 215 : tooltipPos.x + 15, 
-                  top: containerSize.height && (tooltipPos.y + 150 > containerSize.height) ? tooltipPos.y - 140 : tooltipPos.y + 15
+                style={{
+                  ...(containerSize.width && (tooltipPos.x + 230 > containerSize.width)
+                    ? { right: containerSize.width - tooltipPos.x + 15 }
+                    : { left: tooltipPos.x + 15 }),
+                  ...(containerSize.height && (tooltipPos.y + 150 > containerSize.height)
+                    ? { bottom: containerSize.height - tooltipPos.y + 15 }
+                    : { top: tooltipPos.y + 15 })
                 }}
               >
                 <div className="text-[10px] uppercase tracking-widest font-bold text-ink-muted mb-2 border-b border-line pb-2">

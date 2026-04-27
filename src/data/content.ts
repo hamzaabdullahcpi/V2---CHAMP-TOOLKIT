@@ -178,7 +178,7 @@ export const stepsData = [
         ],
         partners: [
           { name: "CCFLA", link: "https://climatecities.org/" },
-          { name: "World Bank", link: "https://www.worldbank.org/" }
+          { name: "Urban-Act", link: "#" }
         ]
       }
     ],
