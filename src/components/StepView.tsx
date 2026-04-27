@@ -532,7 +532,7 @@ export default function StepView({ step, onNext, onPrev, isFirst, isLast }: { st
       className="py-12 max-w-4xl mx-auto pb-32"
     >
       <div className="mb-10 max-w-3xl">
-        <span className="font-sans text-sm font-semibold text-ink-muted mb-4 block">Section 0{step.id}</span>
+        <span className="font-sans text-sm font-semibold text-ink-muted mb-4 block">Step 0{step.id}</span>
         <h1 className="font-heading text-5xl md:text-6xl text-ink leading-[1.1] mb-6">
           {step.title}
         </h1>
