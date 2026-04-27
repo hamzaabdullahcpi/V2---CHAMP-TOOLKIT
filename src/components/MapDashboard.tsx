@@ -427,11 +427,15 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
                           key={geo.rsmKey}
                           geography={geo}
                           fill={fill}
-                          stroke="#ffffff"
-                          strokeWidth={0.5}
+                          stroke={activeTab === 'finance' ? fill : "#ffffff"}
+                          strokeWidth={activeTab === 'finance' ? 1.5 : 0.5}
                           style={{
-                            default: { outline: "none", transition: "fill 0.3s ease" },
-                            hover: { fill: activeTab === 'ndc' ? fill : (fill !== "#e2e8f0" || activeTab === 'finance' ? (activeTab === 'finance' ? "#8cb3cc" : "#2d3780") : "#d1d5db"), outline: "none" },
+                            default: { outline: "none", transition: "all 0.3s ease" },
+                            hover: { 
+                              fill: activeTab === 'ndc' ? fill : (fill !== "#e2e8f0" || activeTab === 'finance' ? (activeTab === 'finance' ? "#8cb3cc" : "#2d3780") : "#d1d5db"), 
+                              stroke: activeTab === 'finance' ? "#8cb3cc" : "#ffffff",
+                              outline: "none" 
+                            },
                             pressed: { outline: "none" },
                           }}
                           onMouseEnter={() => {
