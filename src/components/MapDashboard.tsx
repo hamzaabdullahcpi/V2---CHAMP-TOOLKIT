@@ -218,7 +218,7 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
     if (activeTab === 'finance') {
       const region = getFinanceRegionName(name);
       if (region && hoveredRegion === region) {
-        return "#8cb3cc"; // Hover color for regions
+        return "#475569"; // Hover color for regions (dark grey)
       }
       return region ? financeColors[region] : "#e2e8f0";
     }
@@ -476,8 +476,8 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
                           style={{
                             default: { outline: "none", transition: "all 0.3s ease" },
                             hover: { 
-                              fill: activeTab === 'ndc' ? fill : (fill !== "#e2e8f0" || activeTab === 'finance' ? (activeTab === 'finance' ? "#8cb3cc" : "#2d3780") : "#d1d5db"), 
-                              stroke: activeTab === 'finance' ? "#8cb3cc" : "#ffffff",
+                              fill: activeTab === 'ndc' ? fill : (fill !== "#e2e8f0" || activeTab === 'finance' ? (activeTab === 'finance' ? "#475569" : "#2d3780") : "#d1d5db"), 
+                              stroke: activeTab === 'finance' ? "#475569" : "#ffffff",
                               outline: "none" 
                             },
                             pressed: { outline: "none" },
