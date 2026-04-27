@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { AreaChart, Users, Globe2, FileText, ArrowRight, ExternalLink, ChevronDown, ChevronUp, ZoomIn, Maximize, Hand, MousePointer2 } from 'lucide-react';
+import { AreaChart, Users, Globe2, FileText, ArrowRight, ExternalLink, ChevronDown, ChevronUp, ZoomIn, Maximize, Hand, MousePointer2, Info, X } from 'lucide-react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 // @ts-ignore
 import { geoRobinson } from 'd3-geo-projection';
@@ -125,6 +125,7 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
   const [activeTool, setActiveTool] = useState<'default' | 'pan'>('default');
   const [isDragging, setIsDragging] = useState(false);
   const [showZoomSlider, setShowZoomSlider] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const handleResetMap = () => { 
     setMapZoom(1); 
@@ -279,6 +280,74 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
             setContainerSize({ width: rect.width, height: rect.height });
           }}
         >
+          {/* Info Button */}
+          <button
+            onClick={() => setIsInfoOpen(!isInfoOpen)}
+            className="absolute top-4 left-4 z-40 bg-white border border-line shadow-sm p-2 rounded-full hover:bg-slate-50 transition-colors text-slate-600 hover:text-[#3c4799] focus:outline-none"
+            title="Map Information"
+          >
+            <Info size={18} />
+          </button>
+
+          {/* Info Modal */}
+          <AnimatePresence>
+            {isInfoOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute top-16 left-4 z-50 bg-surface border border-line shadow-xl w-[320px] rounded-md overflow-hidden"
+              >
+                <div className="flex justify-between items-center p-3 border-b border-line bg-slate-50">
+                  <h4 className="font-heading font-semibold text-ink text-sm">Map Information</h4>
+                  <button onClick={() => setIsInfoOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+                    <X size={16} />
+                  </button>
+                </div>
+                <div className="p-4 text-sm text-slate-600 space-y-3 font-light leading-relaxed">
+                  {activeTab === 'champ' && (
+                    <>
+                      <p><strong className="font-semibold text-ink">CHAMP Endorsing Country:</strong> Countries that have endorsed the Coalition for High Ambition Multilevel Partnerships (CHAMP) initiative.</p>
+                      <p className="text-xs text-ink-muted border-t border-line pt-2 mt-2 font-medium">Source: CHAMP</p>
+                      <a href="https://www.cop28.com/en/cop28-uae-coalition-for-high-ambition-multilevel-partnerships-for-climate-action" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[#3c4799] hover:underline font-medium mt-1">
+                        Read more about CHAMP <ExternalLink size={12} />
+                      </a>
+                    </>
+                  )}
+                  {activeTab === 'ndc' && (
+                    <>
+                      <p className="leading-snug space-y-1.5">
+                        <strong className="font-semibold text-ink text-[13px] block">Strong (Category A+ / A):</strong>
+                        Explicit and well-developed urban policies, dedicated urban strategies, and clear multi-level governance structures.
+                      </p>
+                      <p className="leading-snug space-y-1.5 pt-1">
+                        <strong className="font-semibold text-ink text-[13px] block">Moderate (Category B):</strong>
+                        Some urban references, identified urban challenges, but lacks comprehensive dedicated measures.
+                      </p>
+                      <p className="leading-snug space-y-1.5 pt-1">
+                        <strong className="font-semibold text-ink text-[13px] block">Weak (Category C / D):</strong>
+                        Minimal or no urban context; urban areas strictly mentioned in vulnerability contexts without active policy measures.
+                      </p>
+                      <p className="text-xs text-ink-muted border-t border-line pt-2 mt-2 font-medium">Source: UN-Habitat</p>
+                      <a href="https://unhabitat.org/sites/default/files/2025/02/urban_content_in_ndc_3.0._a_global_snapshot_updated-128-ndcs-1_1.pdf" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[#3c4799] hover:underline font-medium mt-1">
+                        View UN-Habitat Report <ExternalLink size={12} />
+                      </a>
+                    </>
+                  )}
+                  {activeTab === 'finance' && (
+                    <>
+                      <p><strong className="font-semibold text-ink">Urban Climate Finance:</strong> Displays regional urban climate finance needs versus current flows.</p>
+                      <p className="text-xs text-ink-muted border-t border-line pt-2 mt-2 font-medium">Source: CCFLA</p>
+                      <a href="https://citiesclimatefinance.org/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[#3c4799] hover:underline font-medium mt-1">
+                        Read the State of Cities Report <ExternalLink size={12} />
+                      </a>
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Map Controls */}
           <div className="absolute top-4 right-4 flex flex-col items-end gap-2 z-40 opacity-40 hover:opacity-100 transition-opacity duration-300">
             {/* Zoom Control */}

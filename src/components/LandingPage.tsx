@@ -28,7 +28,7 @@ export default function LandingPage({ onStart, onIntro }: LandingPageProps) {
       title: "UN-Habitat NDC Report Launch",
       description: "A comprehensive guide on integrating urban climate action into Nationally Determined Contributions (NDCs). This vital report provides national governments with the framework needed to ensure municipal financing pipelines are formally recognized and supported.",
       buttonText: "Read the Report",
-      image: "/ndc-report.png"
+      image: "https://unhabitat.org/sites/default/files/styles/cover_image_lg/public/2026/02/urban_content_in_ndc_3.0._a_global_snapshot_updated-128-NDCs-1_page-0001_0.jpg.webp?itok=WVyoOJ-f"
     },
     {
       label: "Country Spotlight",
