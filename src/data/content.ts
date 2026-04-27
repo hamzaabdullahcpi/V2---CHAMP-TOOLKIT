@@ -578,10 +578,10 @@ export const stepsData = [
         ]
       },
       {
-        name: "Grants for Demos",
-        what: "Structured mechanisms for deploying seed/grant funding to municipalities to pilot new technologies or operational models.",
+        name: "Grants for Pilots and Demonstrations",
+        what: "A model for deploying seed/grant funding to municipalities to pilot new technologies or climate action programs",
         howItWorks: "National funders issue grant calls to cities to test systemic interventions, proving technical viability and finance readiness before debt is introduced.",
-        howToImplement: "Design grant criteria that explicitly measure a local government's capacity to scale the pilot into a full infrastructure project.",
+        howToImplement: "National or subnational governments co-design the grant call, using the framework, in collaboration with key partners and publish the call for cities to fund and implement the System Demonstrator program",
         frameworks: [
           { name: "System Demonstrators Grants Call Framework", link: "https://en.viablecities.se/" }
         ],
@@ -596,9 +596,9 @@ export const stepsData = [
       },
       {
         name: "Intra-City Aggregated Procurement",
-        what: "Mechanisms that pool purchasing demand across municipal departments and multiple cities to mandate low-carbon standards.",
+        what: "Models that aggregate purchasing demand across municipal departments to shape markets for low-carbon goods and services",
         howItWorks: "Cities aggregate demand for energy, logistics, or materials, providing suppliers the guaranteed volume needed to justify decarbonizing their operations.",
-        howToImplement: "National governments anchor procurement cohorts to maximize market leverage.",
+        howToImplement: "National governments engage with the WEF First Movers Cohort and encourage cities to participate in the \"First Mover Cities Cohort\"",
         frameworks: [
           { name: "First Mover Cities (FMC) National Offer", link: "https://www.weforum.org/" }
         ],
@@ -607,7 +607,8 @@ export const stepsData = [
           { title: "Tentative Case Study: Regional Collaboration Model", image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=400&q=80", link: "#" }
         ],
         partners: [
-          { name: "WEF", link: "https://www.weforum.org/" }
+          { name: "WEF", link: "https://www.weforum.org/" },
+          { name: "Viable Cities", link: "https://en.viablecities.se/" }
         ]
       }
     ],
