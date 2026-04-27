@@ -31,7 +31,13 @@ export default function App() {
           ) : currentStep === 'intro' ? (
             <IntroPage onNext={() => setCurrentStep(1)} />
           ) : (
-            <StepView step={stepsData.find(s => s.id === currentStep)} />
+            <StepView 
+              step={stepsData.find(s => s.id === currentStep)} 
+              onNext={currentStep < 5 ? () => setCurrentStep((currentStep as number) + 1) : undefined}
+              onPrev={() => setCurrentStep((currentStep as number) - 1 > 0 ? (currentStep as number) - 1 : 'intro')}
+              isFirst={currentStep === 1}
+              isLast={currentStep === 5}
+            />
           )}
         </div>
       </main>
