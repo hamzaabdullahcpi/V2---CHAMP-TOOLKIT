@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AreaChart, Users, Globe2, FileText, ArrowRight, ExternalLink, ChevronDown, ChevronUp, ZoomIn, Maximize, Hand, MousePointer2, Info, X } from 'lucide-react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { feature, merge } from 'topojson-client';
 // @ts-ignore
 import { geoRobinson } from 'd3-geo-projection';
 import AnimatedCounter from './AnimatedCounter';
@@ -126,6 +127,48 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [showZoomSlider, setShowZoomSlider] = useState(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [geoData, setGeoData] = useState<any>(null);
+
+  React.useEffect(() => {
+    fetch(geoUrl)
+      .then(res => res.json())
+      .then((topology: any) => {
+        const countriesObj = topology.objects.countries;
+        // @ts-ignore
+        const features = feature(topology, countriesObj).features;
+        const tGeometries = countriesObj.geometries;
+
+        const moroccoGeoms = tGeometries.filter((g: any) => g.properties.name === "Morocco" || g.properties.name === "W. Sahara" || g.properties.name === "Western Sahara");
+        const mergedMorocco = {
+          type: "Feature",
+          properties: { name: "Morocco" },
+          // @ts-ignore
+          geometry: merge(topology, moroccoGeoms),
+          id: "Morocco",
+          rsmKey: "geo-morocco"
+        };
+
+        const somaliaGeoms = tGeometries.filter((g: any) => g.properties.name === "Somalia" || g.properties.name === "Somaliland");
+        const mergedSomalia = {
+          type: "Feature",
+          properties: { name: "Somalia" },
+          // @ts-ignore
+          geometry: merge(topology, somaliaGeoms),
+          id: "Somalia",
+          rsmKey: "geo-somalia"
+        };
+
+        const newFeatures = features.filter((f: any) => 
+          !["Morocco", "W. Sahara", "Western Sahara", "Somalia", "Somaliland"].includes(f.properties.name)
+        );
+
+        newFeatures.push(mergedMorocco);
+        newFeatures.push(mergedSomalia);
+
+        setGeoData({ type: "FeatureCollection", features: newFeatures });
+      })
+      .catch((err: any) => console.error("Error loading map data", err));
+  }, []);
 
   const handleResetMap = () => { 
     setMapZoom(1); 
@@ -145,7 +188,8 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
     if (name === "Dem. Rep. Korea") return "North Korea";
     if (name === "Korea" || name === "Republic of Korea") return "South Korea";
     if (name === "S. Sudan") return "South Sudan";
-    if (name === "W. Sahara") return "Western Sahara";
+    if (name === "W. Sahara" || name === "Western Sahara") return "Morocco";
+    if (name === "Somaliland") return "Somalia";
     if (name === "Central African Rep.") return "Central African Republic";
     if (name === "Eq. Guinea") return "Equatorial Guinea";
     if (name === "Dominican Rep.") return "Dominican Republic";
@@ -414,7 +458,7 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
             className="w-full h-auto max-w-[1200px]"
             style={{ width: "100%", maxHeight: "75vh" }}
           >
-              <Geographies geography={geoUrl}>
+              <Geographies geography={geoData || geoUrl}>
                 {({ geographies }) =>
                   geographies
                     .filter((geo) => geo.properties.name !== "Antarctica")
@@ -442,16 +486,18 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
                             if (activeTab === 'finance' && regionName) {
                               setHoveredRegion(regionName);
                             } else if (activeTab === 'champ') {
-                              setHoveredCountry({ name: geo.properties.name, stat: champCountries.has(normalizeName(geo.properties.name)) || champCountries.has(geo.properties.name) ? "Endorsed" : "Not Endorsed" });
+                              const normalized = normalizeName(geo.properties.name);
+                              setHoveredCountry({ name: normalized, stat: champCountries.has(normalized) || champCountries.has(geo.properties.name) ? "Endorsed" : "Not Endorsed" });
                             } else if (activeTab === 'ndc') {
-                              const category = ndcCategories[normalizeName(geo.properties.name)] || ndcCategories[geo.properties.name] || 'None';
+                              const normalized = normalizeName(geo.properties.name);
+                              const category = ndcCategories[normalized] || ndcCategories[geo.properties.name] || 'None';
                               const categoryLabels: Record<string, string> = {
                                 "A+": "A+ (Strong + Means of Implementation)",
                                 "A-B": "A / B+ (Strong / Moderate)",
                                 "C": "C+ / C (Low Content)",
                                 "None": "No Data / No Content"
                               };
-                              setHoveredCountry({ name: geo.properties.name, stat: categoryLabels[category] });
+                              setHoveredCountry({ name: normalized, stat: categoryLabels[category] });
                             }
                           }}
                           onMouseLeave={() => {
