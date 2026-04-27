@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { AreaChart, Users, Globe2, FileText, ArrowRight, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { AreaChart, Users, Globe2, FileText, ArrowRight, ExternalLink, ChevronDown, ChevronUp, ZoomIn, Maximize, Hand, MousePointer2 } from 'lucide-react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 // @ts-ignore
 import { geoRobinson } from 'd3-geo-projection';
@@ -120,6 +120,18 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const [isLegendOpen, setIsLegendOpen] = useState(false);
+  const [mapZoom, setMapZoom] = useState(1);
+  const [mapPan, setMapPan] = useState({ x: 0, y: 0 });
+  const [activeTool, setActiveTool] = useState<'default' | 'pan'>('default');
+  const [isDragging, setIsDragging] = useState(false);
+  const [showZoomSlider, setShowZoomSlider] = useState(false);
+
+  const handleResetMap = () => { 
+    setMapZoom(1); 
+    setMapPan({ x: 0, y: 0 }); 
+    setActiveTool('default');
+    setShowZoomSlider(false);
+  };
 
   const tabs = [
     { id: 'champ', label: 'CHAMP Endorsements' },
@@ -170,9 +182,11 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
   };
 
   // Adjust scaling/translation for tighter fit with no Antarctica.
+  const baseScale = 160;
+  const baseTranslate = [900 / 2, 500 / 2 + 40];
   const projection = geoRobinson()
-    .scale(160)
-    .translate([900 / 2, 500 / 2 + 40]);
+    .scale(baseScale * mapZoom)
+    .translate([baseTranslate[0] + mapPan.x, baseTranslate[1] + mapPan.y]);
 
   return (
     <div className="mb-24 relative">
@@ -244,13 +258,86 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
         </div>
 
         <div 
-          className="relative bg-slate-50 flex items-center justify-center"
+          className={`relative bg-slate-50 flex items-center justify-center overflow-hidden group ${activeTool === 'pan' ? (isDragging ? 'cursor-grabbing' : 'cursor-grab') : 'cursor-default'}`}
+          onMouseDown={() => {
+            if (activeTool === 'pan') setIsDragging(true);
+          }}
+          onMouseUp={() => {
+            if (activeTool === 'pan') setIsDragging(false);
+          }}
+          onMouseLeave={() => {
+            if (activeTool === 'pan') setIsDragging(false);
+          }}
           onMouseMove={(e) => {
+            if (activeTool === 'pan' && isDragging) {
+              setMapPan(p => ({ x: p.x + e.movementX, y: p.y + e.movementY }));
+              return; // Don't update tooltip while dragging
+            }
+            if (isDragging) return; // safety
             const rect = e.currentTarget.getBoundingClientRect();
             setTooltipPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
             setContainerSize({ width: rect.width, height: rect.height });
           }}
         >
+          {/* Map Controls */}
+          <div className="absolute top-4 right-4 flex flex-col items-end gap-2 z-40 opacity-40 hover:opacity-100 transition-opacity duration-300">
+            {/* Zoom Control */}
+            <div className="flex items-center gap-2">
+              <AnimatePresence>
+                {showZoomSlider && (
+                  <motion.div 
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: 120, opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
+                    className="bg-white border border-line shadow-sm rounded-md px-3 py-2 flex items-center overflow-hidden h-[38px]"
+                  >
+                    <input 
+                      type="range" 
+                      min="1" 
+                      max="5" 
+                      step="0.1" 
+                      value={mapZoom} 
+                      onChange={(e) => setMapZoom(parseFloat(e.target.value))}
+                      className="w-full accent-[#3c4799] cursor-pointer"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <button 
+                title="Zoom" 
+                onClick={() => setShowZoomSlider(!showZoomSlider)} 
+                className={`bg-white border text-ink border-line p-2 shadow-sm hover:bg-slate-100 transition-colors rounded-md ${showZoomSlider ? 'text-[#3c4799] bg-slate-50' : 'text-slate-600'}`}
+              >
+                <ZoomIn size={18} />
+              </button>
+            </div>
+            
+            {/* Pan/Select Controls */}
+            <div className="bg-white border border-line shadow-sm flex flex-col rounded-md overflow-hidden">
+              <button 
+                title="Select" 
+                onClick={() => setActiveTool('default')} 
+                className={`p-2 hover:bg-slate-100 transition-colors border-b border-line ${activeTool === 'default' ? 'bg-slate-100 text-[#3c4799]' : 'text-slate-600'}`}
+              >
+                <MousePointer2 size={18} />
+              </button>
+              <button 
+                title="Pan" 
+                onClick={() => setActiveTool('pan')} 
+                className={`p-2 hover:bg-slate-100 transition-colors ${activeTool === 'pan' ? 'bg-slate-100 text-[#3c4799]' : 'text-slate-600'}`}
+              >
+                <Hand size={18} />
+              </button>
+            </div>
+            
+            <button 
+              title="Reset Map" 
+              onClick={handleResetMap} 
+              className="bg-white p-2 border border-line shadow-sm hover:bg-slate-100 text-slate-600 rounded-md transition-colors mt-auto"
+            >
+              <Maximize size={18} />
+            </button>
+          </div>
           <ComposableMap
             projection={projection}
             width={900}

@@ -28,7 +28,7 @@ export default function LandingPage({ onStart, onIntro }: LandingPageProps) {
       title: "UN-Habitat NDC Report Launch",
       description: "A comprehensive guide on integrating urban climate action into Nationally Determined Contributions (NDCs). This vital report provides national governments with the framework needed to ensure municipal financing pipelines are formally recognized and supported.",
       buttonText: "Read the Report",
-      image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80"
+      image: "/ndc-report.png"
     },
     {
       label: "Country Spotlight",
@@ -270,7 +270,7 @@ export default function LandingPage({ onStart, onIntro }: LandingPageProps) {
               transition={{ duration: 0.8 }}
               src={carouselSlides[currentSlide].image} 
               alt={carouselSlides[currentSlide].title} 
-              className="w-full h-full object-cover hover:opacity-100 hover:scale-105 transition-all duration-700 mix-blend-luminosity hover:mix-blend-normal"
+              className="w-full h-full object-cover hover:opacity-100 hover:scale-105 transition-all duration-700"
               referrerPolicy="no-referrer"
             />
           </motion.div>
